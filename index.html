@@ -2,10 +2,48 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Terminy wystawek</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wystawki Niemcy - Ekipa</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; padding: 20px; }
+        .box { background: #1e1e1e; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 500px; }
+        h1 { color: #bb86fc; text-align: center; font-size: 22px; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; background: #2c2c2c; color: white; }
+        button { width: 100%; padding: 10px; background: #03dac6; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; display: none; } /* Tabela ukryta na start */
+        th { background: #333; color: #03dac6; padding: 10px; text-align: left; border-bottom: 2px solid #444; }
+        td { padding: 12px 10px; border-bottom: 1px solid #333; }
+        .data { color: #cf6679; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <h1>Terminy wystawek w Niemczech</h1>
-    <p>Strona w budowie...</p>
+    <div class="box" id="loginBox">
+        <h1>🔐 Dostęp dla Ekipy</h1>
+        <input type="password" id="pass" placeholder="Wpisz hasło...">
+        <button onclick="checkPass()">Wejdź</button>
+    </div>
+
+    <div class="box" id="contentBox" style="display:none;">
+        <h1>📅 Rejony Wystawek</h1>
+        <table>
+            <tr><th>Data</th><th>Rejon</th></tr>
+            <tr><td class="data">15.03</td><td>Berlin / Mitte</td></tr>
+            <tr><td class="data">20.03</td><td>Dortmund / PLZ 44</td></tr>
+        </table>
+        <p style="text-align:center; font-size:12px; color: #555; margin-top:20px;">GitHub nie usuwa tego kodu - strona jest bezpieczna.</p>
+    </div>
+
+    <script>
+        function checkPass() {
+            var p = document.getElementById("pass").value;
+            if(p === "bus2026") { // TUTAJ ZMIENISZ HASŁO
+                document.getElementById("loginBox").style.display = "none";
+                document.getElementById("contentBox").style.display = "block";
+                document.querySelector("table").style.display = "table";
+            } else {
+                alert("Złe hasło, pytaj dabuinfo!");
+            }
+        }
+    </script>
 </body>
 </html>
