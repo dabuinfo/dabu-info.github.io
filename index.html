@@ -131,7 +131,7 @@
   <div id="login-overlay">
     <div class="login-box">
       <h2>🔐 Strefa Ekipy</h2>
-      <input type="password" id="passInput" class="login-input" placeholder="Wpisz hasło z generatora..." onkeypress="if(event.key==='Enter') checkPass()">
+      <input type="password" id="passInput" class="login-input" placeholder="Wpisz hasło..." onkeypress="if(event.key==='Enter') checkPass()">
       <button class="login-btn" id="btnLog" onclick="checkPass()">WEJDŹ</button>
       <div id="msgLog"></div>
     </div>
@@ -156,7 +156,7 @@
     </div>
 
     <div class="search-box">
-      <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="🔍 Szukaj miasta...">
+      <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="🔍 Szukaj miasta, daty lub tygodnia W(nr.)...">
     </div>
     
     <div id="cardsList" style="padding: 10px;"></div>
