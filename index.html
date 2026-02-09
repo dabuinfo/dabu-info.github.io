@@ -221,41 +221,24 @@
         .rules-text { color: #ddd; font-size: 1.0em; line-height: 1.6; margin: 0; }
         .rules-text strong { color: #fff; text-decoration: underline; }
 
-        /* --- STYLIZACJA DLA SMARTFONÓW (POPRAWIONA) --- */
+        /* --- STYLIZACJA DLA SMARTFONÓW --- */
         @media (max-width: 768px) {
             .harmonogram-wrapper { 
-                font-size: 1.15em; /* Zmniejszono z 1.35em */
-                padding: 5px;      /* Mniejszy margines boczny strony */
+                font-size: 1.35em; 
+                padding: 10px;
             }
-            .info-title { font-size: 1.4em; } /* Tytuł nieco mniejszy */
-            
+            .info-title { font-size: 1.6em; }
             .region-label { 
-                padding: 10px 5px; /* Zmniejszono odstępy na liście (było 15px) */
-                font-size: 1.05em; /* Tekst regionu mniejszy (było 1.2em) */
+                padding: 15px 5px;
+                font-size: 1.2em; 
             }
-            .region-label input { transform: scale(1.4); margin-right: 10px; } /* Mniejszy checkbox */
-            
-            .client-input { 
-                padding: 12px; /* Mniejsze pole do pisania (było 20px) */
-                font-size: 1.0em; /* Mniejszy tekst wpisywania */
-            }
-            
-            .submit-btn { 
-                padding: 16px; /* Mniejszy przycisk (było 25px) */
-                font-size: 1.15em; /* Mniejszy tekst na przycisku (było 1.3em) */
-                margin-bottom: 15px; 
-            }
-            
+            .region-label input { transform: scale(1.8); margin-right: 15px; }
+            .client-input { padding: 20px; font-size: 1.1em; }
+            .submit-btn { padding: 25px; font-size: 1.3em; margin-bottom: 20px; }
             .selection-tools { flex-direction: column; align-items: stretch; }
-            .selection-tools a { 
-                text-align: center; 
-                padding: 10px; /* Mniejsze przyciski wyboru (było 15px) */
-                margin-bottom: 5px; 
-                font-weight: bold; 
-            }
-            
-            .strategy-card { flex: 1 1 100%; margin-bottom: 15px; padding: 15px; } /* Mniejsze karty pakietów */
-            .regions-scroll-box { max-height: 350px; }
+            .selection-tools a { text-align: center; padding: 15px; margin-bottom: 5px; font-weight: bold; }
+            .strategy-card { flex: 1 1 100%; margin-bottom: 20px; }
+            .regions-scroll-box { max-height: 400px; }
         }
     </style>
 </head>
@@ -272,7 +255,7 @@
 <div class="harmonogram-wrapper">
 
     <div class="prof-desc" id="profDesc">
-        Zajmujemy się profesjonalnym opracowaniem informacji dla osób, które zajmują się importem rzeczy używanych z tzw. wystawek i serwisów.
+        Zajmujemy się profesjonalnym opracowaniem informacji dla osób, które zajmują się importem rzeczy używanych z tzw. wystawek i serwisów. Działamy od 30 lat szukając najpierw dla siebie terminów a od 2008 jako marka dabu-info.
     </div>
 
     <div class="info-box-wrapper">
@@ -297,8 +280,9 @@
         
         <a href="https://dabu-info.blogspot.com/p/spis-rejonow.html" 
            target="_blank" 
-           class="check-list-btn">
-            📂 OTWÓRZ LISTĘ / OPEN LIST
+           class="check-list-btn"
+           id="btnOpenList">
+            📂 OTWÓRZ SPIS / OPEN LIST
         </a>
 
         <div class="preview-contact-note" id="previewNote">
@@ -467,7 +451,7 @@
         </div>
 
         <div class="single-option-box hidden" id="schrottBox">
-             <label class="region-label"><input id="schrottOption" type="checkbox" /> <span id="schrottLabel">🧲 Tylko Złom / E-Schrott</span></label>
+             <label class="region-label"><input id="schrottOption" type="checkbox" /> <span id="schrottLabel">🧲 Schrott & E-Schrott</span></label>
         </div>
 
         <input class="client-input" id="klientEmail" placeholder="Twój adres E-mail (wymagane)" type="email" />
@@ -515,13 +499,12 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // --- 1. WYKRYWANIE JĘZYKA PRZEGLĄDARKI ---
         var userLang = navigator.language || navigator.userLanguage; 
         userLang = userLang.substr(0, 2).toLowerCase();
         
         // LISTA OBSŁUGIWANYCH JĘZYKÓW
         const supported = ['pl', 'de', 'cs', 'sk', 'hu', 'ro', 'bg', 'tr', 'bs', 'uk', 'ru', 'lt'];
-        if (!supported.includes(userLang)) userLang = 'de'; // Domyślny niemiecki dla nieznanych
+        if (!supported.includes(userLang)) userLang = 'de'; // Domyślny DE dla nieznanych
 
         // WSPÓLNE CENY DLA EUROPY (EUR)
         const pricesEUR = { 1: 20, 2: 30, 3: 40, groupSurcharge: 20, pro: 60, offline: 5, dhl: 5, map: 25 };
@@ -531,7 +514,8 @@
                 currency: 'PLN',
                 prices: { 1: 60, 2: 100, 3: 120, groupSurcharge: 40, pro: 240, offline: 20, dhl: 25, map: 100 },
                 texts: {
-                    profDesc: "Zajmujemy się profesjonalnym opracowaniem informacji dla osób, które zajmują się importem rzeczy używanych z tzw. wystawek i serwisów.",
+                    btnOpenList: '📂 OTWÓRZ SPIS / OPEN LIST',
+                    profDesc: "Zajmujemy się profesjonalnym opracowaniem informacji dla osób, które zajmują się importem rzeczy używanych z tzw. wystawek i serwisów. Działamy od 30 lat szukając najpierw dla siebie terminów a od 2008 jako marka dabu-info.",
                     rulesTitle: "\u26A0 WAŻNE: Zasady Licencji",
                     rulesText: "👤 Dostęp Indywidualny = 1 Użytkownik.<br>🚫 Po wykryciu udostępniania kolejne zamówienie zostanie zoptymalizowane dla grupy.<br>🏢 <strong>Wybierz \"Dostęp Grupowy\", aby uniknąć blokady!</strong>",
                     bonus: "🎁 <b>Gratis:</b> Po zamówieniu otrzymasz <b>Poradnik Wystawkowicza</b>!",
@@ -592,7 +576,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Wir beschäftigen uns mit der professionellen Aufbereitung von Informationen für Personen, die gebrauchte Gegenstände aus Sperrmüll und Haushaltsauflösungen importieren.",
+                    btnOpenList: '📂 VERZEICHNIS ÖFFNEN',
+                    profDesc: "Wir beschäftigen uns mit der professionellen Aufbereitung von Informationen für Personen, die gebrauchte Gegenstände aus Sperrmüll und Haushaltsauflösungen importieren. Wir sind seit 30 Jahren tätig, haben zunächst Termine für uns selbst gesucht und agieren seit 2008 als Marke dabu-info.",
                     rulesTitle: "\u26A0 WICHTIG: Lizenz & Audit",
                     rulesText: "👤 Einzelzugriff = 1 Benutzer.<br>🚫 Entdeckung der Weitergabe = 💸 <b>Nachzahlung bei der nächsten Bestellung</b>.<br>🏢 <strong>Wählen Sie sofort den Gruppenzugriff!</strong>",
                     bonus: "🎁 <b>Gratis:</b> Nach der Bestellung erhalten Sie den <b>Sperrmüll-Leitfaden</b>!",
@@ -653,7 +638,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Zabýváme se profesionálním zpracováním informací pro osoby, které se zabývají dovozem použitého zboží z tzv. výstav a servisů.",
+                    btnOpenList: '📂 OTEVŘÍT SEZNAM',
+                    profDesc: "Zabýváme se profesionálním zpracováním informací pro osoby, které se zabývají dovozem použitého zboží z tzv. výstav a servisů. Působíme již 30 let, zpočátku jsme hledali termíny pro sebe a od roku 2008 jako značka dabu-info.",
                     rulesTitle: "\u26A0 DŮLEŽITÉ: Pravidla licence",
                     rulesText: "👤 Individuální přístup = 1 uživatel.<br>🚫 Sdílení je zakázáno.<br>🏢 <strong>Vyberte \"Skupinový přístup\", abyste se vyhnuli blokaci!</strong>",
                     bonus: "🎁 <b>Bonus:</b> Po objednání obdržíte <b>Průvodce sběrem</b>!",
@@ -714,7 +700,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Zaoberáme sa profesionálnym spracovaním informácií pre osoby, ktoré sa zaoberajú dovozom použitého tovaru z tzv. výstav a servisov.",
+                    btnOpenList: '📂 OTVORIŤ ZOZNAM',
+                    profDesc: "Zaoberáme sa profesionálnym spracovaním informácií pre osoby, ktoré sa zaoberajú dovozom použitého tovaru z tzv. výstav a servisov. Pôsobíme už 30 rokov, spočiatku sme hľadali termíny pre seba a od roku 2008 ako značka dabu-info.",
                     rulesTitle: "\u26A0 DÔLEŽITÉ: Pravidlá licencie",
                     rulesText: "👤 Individuálny prístup = 1 používateľ.<br>🚫 Zdieľanie je zakázané.<br>🏢 <strong>Vyberte \"Skupinový prístup\", aby ste sa vyhli blokácii!</strong>",
                     bonus: "🎁 <b>Bonus:</b> Po objednaní dostanete <b>Sprievodcu zberom</b>!",
@@ -775,7 +762,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Professzionális információfeldolgozással foglalkozunk azok számára, akik használt cikkek importjával foglalkoznak lomtalanításokból és felszámolásokból.",
+                    btnOpenList: '📂 JEGYZÉK MEGNYITÁSA',
+                    profDesc: "Professzionális információfeldolgozással foglalkozunk azok számára, akik használt cikkek importjával foglalkoznak lomtalanításokból és felszámolásokból. 30 éve működünk, kezdetben saját magunknak kerestünk időpontokat, 2008 óta pedig dabu-info márkanév alatt.",
                     rulesTitle: "\u26A0 FONTOS: Licencszabályok",
                     rulesText: "👤 Egyéni hozzáférés = 1 felhasználó.<br>🚫 A megosztás tilos.<br>🏢 <strong>Válassza a \"Csoportos hozzáférést\" a blokkolás elkerülése érdekében!</strong>",
                     bonus: "🎁 <b>Bónusz:</b> Rendelés után megkapja a <b>Lomtalanítási útmutatót</b>!",
@@ -836,7 +824,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Ne ocupăm de prelucrarea profesională a informațiilor pentru persoanele care importă bunuri second-hand de la colectări și lichidări.",
+                    btnOpenList: '📂 DESCHIDEȚI REGISTRUL',
+                    profDesc: "Ne ocupăm de prelucrarea profesională a informațiilor pentru persoanele care importă bunuri second-hand de la colectări și lichidări. Activăm de 30 de ani, căutând inițial date pentru noi, iar din 2008 sub brandul dabu-info.",
                     rulesTitle: "\u26A0 IMPORTANT: Reguli de Licență",
                     rulesText: "👤 Acces Individual = 1 Utilizator.<br>🚫 Partajarea este interzisă.<br>🏢 <strong>Alege \"Acces Grup\" pentru a evita blocarea!</strong>",
                     bonus: "🎁 <b>Bonus:</b> După comandă primești <b>Ghidul Colectorului</b>!",
@@ -897,7 +886,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Ние се занимаваме с професионална обработка на информация за хора, внасящи употребявани стоки от разпродажби и ликвидации.",
+                    btnOpenList: '📂 ОТВОРЕТЕ СПИСЪКА',
+                    profDesc: "Ние се занимаваме с професионална обработка на информация за хора, внасящи употребявани стоки от разпродажби и ликвидации. Работим от 30 години, като първоначално търсехме дати за себе си, а от 2008 г. като марка dabu-info.",
                     rulesTitle: "\u26A0 ВАЖНО: Правила за лиценз",
                     rulesText: "👤 Индивидуален достъп = 1 Потребител.<br>🚫 Споделянето е забранено.<br>🏢 <strong>Изберете \"Групов достъп\", за да избегнете блокиране!</strong>",
                     bonus: "🎁 <b>Бонус:</b> След поръчка получавате <b>Ръководство за събиране</b>!",
@@ -958,7 +948,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "İkinci el eşya ithalatı yapan kişiler için profesyonel bilgi işleme hizmeti sunuyoruz.",
+                    btnOpenList: '📂 LİSTEYİ AÇ',
+                    profDesc: "İkinci el eşya ithalatı yapan kişiler için profesyonel bilgi işleme hizmeti sunuyoruz. 30 yıldır faaliyet gösteriyoruz, başlangıçta kendimiz için tarih ararken, 2008'den beri dabu-info markası olarak hizmet veriyoruz.",
                     rulesTitle: "\u26A0 ÖNEMLİ: Lisans Kuralları",
                     rulesText: "👤 Bireysel Erişim = 1 Kullanıcı.<br>🚫 Paylaşım yasaktır.<br>🏢 <strong>Engellenmemek için \"Grup Erişimi\"ni seçin!</strong>",
                     bonus: "🎁 <b>Bonus:</b> Siparişten sonra <b>Toplama Rehberi</b> alacaksınız!",
@@ -1019,7 +1010,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Bavimo se profesionalnom obradom informacija za osobe koje uvoze polovnu robu sa tzv. izložbi i servisa.",
+                    btnOpenList: '📂 OTVORI LISTU',
+                    profDesc: "Bavimo se profesionalnom obradom informacija za osobe koje uvoze polovnu robu sa tzv. izložbi i servisa. Poslujemo već 30 godina, u početku tražeći termine za sebe, a od 2008. godine kao brend dabu-info.",
                     rulesTitle: "\u26A0 VAŽNO: Pravila Licence",
                     rulesText: "👤 Individualni pristup = 1 Korisnik.<br>🚫 Dijeljenje je zabranjeno.<br>🏢 <strong>Odaberite \"Grupni pristup\" da izbjegnete blokadu!</strong>",
                     bonus: "🎁 <b>Bonus:</b> Nakon narudžbe dobijate <b>Vodič za sakupljanje</b>!",
@@ -1080,7 +1072,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Ми займаємося професійною обробкою інформації для осіб, які імпортують вживані товари з так званих виставок і ліквідацій.",
+                    btnOpenList: '📂 ВІДКРИТИ СПИСОК',
+                    profDesc: "Ми займаємося професійною обробкою інформації для осіб, які імпортують вживані товари з так званих виставок і ліквідацій. Ми працюємо вже 30 років, спочатку шукали дати для себе, а з 2008 року як бренд dabu-info.",
                     rulesTitle: "\u26A0 ВАЖЛИВО: Правила ліцензії",
                     rulesText: "👤 Індивідуальний доступ = 1 користувач.<br>🚫 Передача доступу заборонена.<br>🏢 <strong>Оберіть \"Груповий доступ\", щоб уникнути блокування!</strong>",
                     bonus: "🎁 <b>Бонус:</b> Після замовлення отримаєте <b>Гід по збору</b>!",
@@ -1141,7 +1134,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Мы занимаемся профессиональной обработкой информации для лиц, импортирующих подержанные товары с так называемых выставок и ликвидаций.",
+                    btnOpenList: '📂 ОТКРЫТЬ СПИСОК',
+                    profDesc: "Мы занимаемся профессиональной обработкой информации для лиц, импортирующих подержанные товары с так называемых выставок и ликвидаций. Мы работаем уже 30 лет, сначала искали даты для себя, а с 2008 года как бренд dabu-info.",
                     rulesTitle: "\u26A0 ВАЖНО: Правила лицензии",
                     rulesText: "👤 Индивидуальный доступ = 1 пользователь.<br>🚫 Передача доступа запрещена.<br>🏢 <strong>Выберите \"Групповой доступ\", чтобы избежать блокировки!</strong>",
                     bonus: "🎁 <b>Бонус:</b> После заказа вы получите <b>Гид по сбору</b>!",
@@ -1202,7 +1196,8 @@
                 currency: 'EUR',
                 prices: pricesEUR,
                 texts: {
-                    profDesc: "Mes užsiimame profesionaliu informacijos apdorojimu asmenims, importuojantiems naudotas prekes iš vadinamųjų parodų ir likvidacijų.",
+                    btnOpenList: '📂 ATIDARYTI SĄRAŠĄ',
+                    profDesc: "Mes užsiimame profesionaliu informacijos apdorojimu asmenims, importuojantiems naudotas prekes iš vadinamųjų parodų ir likvidacijų. Dirbame jau 30 metų, iš pradžių ieškojome datų sau, o nuo 2008 m. kaip prekės ženklas dabu-info.",
                     rulesTitle: "\u26A0 SVARBU: Licencijos taisyklės",
                     rulesText: "👤 Individuali prieiga = 1 Vartotojas.<br>🚫 Dalinimasis draudžiamas.<br>🏢 <strong>Pasirinkite \"Grupinę prieigą\", kad išvengtumėte blokavimo!</strong>",
                     bonus: "🎁 <b>Bonusas:</b> Po užsakymo gausite <b>Rinkėjo gidą</b>!",
@@ -1285,6 +1280,7 @@
         function setAttr(id, attr, text) { if(document.getElementById(id)) document.getElementById(id).setAttribute(attr, text); }
 
         // APLIKOWANIE TEKSTÓW Z CONFIGU
+        setHtml('btnOpenList', t.btnOpenList);
         setText('profDesc', t.profDesc);
         setText('rulesTitle', t.rulesTitle);
         setHtml('rulesText', t.rulesText);
@@ -1411,30 +1407,43 @@
                  return;
             }
 
+            // Sprawdzenie czy to wersja PRO (wszystkie rejony)
             var totalRegions = document.querySelectorAll('.region-chk').length;
             var isPro = (wR.length === totalRegions && wR.length > 0);
             
             var baseWeeklyPrice = 0;
 
+            // --- 1. OBLICZANIE CENY BAZOWEJ ZA TYDZIEŃ ---
             if (isPro) {
                  baseWeeklyPrice = p.pro;
+                 // W PRO zazwyczaj grupa i offline są w cenie lub niedostępne jako dopłata
             } else {
+                 // Cena za liczbę rejonów (1, 2 lub 3)
                  baseWeeklyPrice = p[wR.length] || p[1] || 0;
+                 
+                 // Dopłata grupowa (liczba tygodni * dopłata) -> więc dodajemy do bazy tygodniowej
                  if (isGroup) {
                      baseWeeklyPrice += p.groupSurcharge;
                  }
             }
 
+            // Mnożymy stawkę tygodniową przez liczbę wybranych tygodni
             var suma = baseWeeklyPrice * wT.length;
             
+            // --- 2. DODATKI JEDNORAZOWE (DO CAŁEGO ZAMÓWIENIA) ---
+
+            // Mapa Online (Tylko w wersji Basic, jednorazowa opłata)
+            // Dodawana tylko raz, niezależnie od liczby tygodni
             if (!isPro && isMap) {
                 suma += p.map;
             }
 
+            // Offline (Płatny tylko w Basic Single)
             if (!isPro && !isGroup && isO) {
                 suma += p.offline; 
             }
             
+            // Wysyłka DHL/Paczkomat
             if (isD) {
                 suma += p.dhl;
             }
