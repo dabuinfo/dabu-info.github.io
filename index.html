@@ -136,13 +136,14 @@
         .regions-scroll-box::-webkit-scrollbar-track { background: #1a1a1a; }
         .regions-scroll-box::-webkit-scrollbar-thumb { background: #4ca1af; border-radius: 6px; }
         
+        /* ZMIANA 2: Zmniejszono czcionkę i padding dla rejonów i tygodni */
         .region-label { 
             display: block; 
-            padding: 10px; 
+            padding: 8px; /* Było 10px */
             cursor: pointer; 
             border-bottom: 1px solid rgba(255,255,255,0.05); 
             color: #ddd; 
-            font-size: 1.1em; 
+            font-size: 0.95em; /* Było 1.1em - lekkie zmniejszenie */
         }
         .region-label:hover { background: rgba(255,255,255,0.1); }
         .region-label input { margin-right: 15px; transform: scale(1.5); }
@@ -153,7 +154,13 @@
         .pro-highlight { color: #ffd700 !important; font-weight: bold; border-color: rgba(255, 215, 0, 0.3) !important; }
 
         .extra-options-group { background: rgba(0, 0, 0, 0.2); border: 2px dashed #f1c40f; border-radius: 10px; padding: 15px; margin-bottom: 20px; }
-        .option-box { padding: 12px; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        /* ZMIANA 3: Zmniejszono padding i marginesy w opcjach dodatkowych (paginacja) */
+        .option-box { 
+            padding: 8px; /* Było 12px */
+            margin-bottom: 3px; /* Było 5px */
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
         .option-box:last-child { border-bottom: none; margin-bottom: 0; }
         .single-option-box { background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 8px; border: 1px dashed #7f8c8d; margin-bottom: 15px; }
         
@@ -742,7 +749,7 @@
                     placeholderPhone: 'Telefónne číslo (voliteľné)',
                     placeholderEmail: 'Váš E-mail (povinné)',
                     btnSubmit: '\u2705 ODOSLAŤ DOPYT',
-                    freeSampleText: 'ℹ️ <b>Ukážka zadarmo:</b> Archívna sada.',
+                    freeSampleText: 'ℹ️ <b>Ukázka zadarmo:</b> Archívna sada.',
                     archiveLink: '📂 OTVORIŤ ARCHÍV',
                     weekLabel: 'Týždeň',
                     rodoLabel: 'Súhlasím so spracovaním osobných údajov.',
@@ -1347,7 +1354,7 @@
             var eW = new Date(sW); eW.setDate(sW.getDate() + 4);
             var label = document.createElement('label'); label.className = "region-label";
             var input = document.createElement('input'); input.type = "checkbox"; input.className = "week-chk"; input.name = "tygodnie[]";
-            input.value = "Week " + getWeekNumber(sW) + " (" + sW.getDate() + "." + (sW.getMonth()+1) + " - " + eW.getDate() + "." + (eW.getMonth()+1) + ")";
+            input.value = t.weekLabel + " " + getWeekNumber(sW) + " (" + sW.getDate() + "." + (sW.getMonth()+1) + " - " + eW.getDate() + "." + (eW.getMonth()+1) + ")";
             if (i === 0) input.checked = true;
             label.appendChild(input); label.appendChild(document.createTextNode(" " + input.value));
             weeksContainer.appendChild(label);
