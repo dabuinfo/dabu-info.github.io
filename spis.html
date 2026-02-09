@@ -38,25 +38,31 @@
             position: relative;
         }
 
-        /* --- LEGENDA --- */
+        /* --- LEGENDA (Stylizowana jak na zdjęciu) --- */
         .legend-box {
-            background: #2c2c2c;
+            background: #2c2c2c; /* Tło jak na zdjęciu */
             border-bottom: 1px solid var(--border-color);
-            padding: 12px 15px;
-            font-size: 13px;
+            padding: 15px 15px;
+            font-size: 14px; /* Nieco większa czcionka dla czytelności */
             color: #ccc;
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            justify-content: center;
-            line-height: 1.4;
+            justify-content: center; /* Wyśrodkowanie elementów */
+            line-height: 1.5;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             white-space: nowrap;
+        }
+
+        /* Ostatni element (Kosz) może być długi, pozwalamy mu się łamać na małych ekranach */
+        .legend-item:last-child {
+            white-space: normal;
+            text-align: center;
         }
 
         .search-box { padding: 15px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
@@ -120,7 +126,9 @@
         
         .icon-svg { width:20px; height:20px; vertical-align:middle; display: inline-block; }
         .emoji-span { font-size: 20px; vertical-align: middle; line-height: 1; }
+        
         .icon-metal  { fill: #90A4AE; } 
+        /* Kolor niebieski dla kosza - zgodnie ze zdjęciem */
         .icon-kosz   { fill: #2196F3; } 
 
         #backToTop {
@@ -154,13 +162,13 @@
   </div>
   
   <div class="legend-box noselect">
-    <div class="legend-item"><span class="emoji-span">🛋️</span> <span id="lbl_furn">Gabaryty</span></div>
-    <div class="legend-item"><span class="emoji-span">🪑</span> <span id="lbl_wood">Drewno</span></div>
-    <div class="legend-item"><span class="emoji-span">🧲</span> <span id="lbl_metal">Metal</span></div>
-    <div class="legend-item"><span class="emoji-span">🔌</span> <span id="lbl_electro">Elektro</span></div>
+    <div class="legend-item"><span class="emoji-span">🛋️</span> <span id="lbl_furn">Gabaryty (Meble)</span></div>
+    <div class="legend-item"><span class="emoji-span">🪑</span> <span id="lbl_wood">Drewno (Holz)</span></div>
+    <div class="legend-item"><span class="emoji-span">🧲</span> <span id="lbl_metal">Metal (Złom)</span></div>
+    <div class="legend-item"><span class="emoji-span">🔌</span> <span id="lbl_electro">Elektro (AGD, Lodówki, E-Złom)</span></div>
     <div class="legend-item">
       <svg class="icon-svg icon-kosz" viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg> 
-      <span id="lbl_paper">Kosz (Papier)</span>
+      <span id="lbl_paper">Kosz (Papier - *Limburg-Weilburg: Małe Elektro!)</span>
     </div>
   </div>
 
@@ -180,7 +188,17 @@
 <script>
   // --- KONFIGURACJA JĘZYKOWA (12 JĘZYKÓW) ---
   const translations = {
-    pl: { search: "🔍 Szukaj miasta...", found: "Znaleziono:", l_furn: "Gabaryty (Meble)", l_wood: "Drewno", l_metal: "Metal", l_elec: "Elektro", l_paper: "Kosz (Papier)", days: { 'PON.': 'PON.', 'WT.': 'WT.', 'ŚR.': 'ŚR.', 'CZW.': 'CZW.', 'PT.': 'PT.', 'SOB.': 'SOB.', 'ND.': 'ND.', '⚠️': '⚠️' } },
+    pl: { 
+        search: "🔍 Szukaj miasta...", 
+        found: "Znaleziono:", 
+        // Poniższe teksty dopasowane dokładnie do zdjęcia
+        l_furn: "Gabaryty (Meble)", 
+        l_wood: "Drewno (Holz)", 
+        l_metal: "Metal (Złom)", 
+        l_elec: "Elektro (AGD, Lodówki, E-Złom)", 
+        l_paper: "Kosz (Papier - *Limburg-Weilburg: Małe Elektro!)", 
+        days: { 'PON.': 'PON.', 'WT.': 'WT.', 'ŚR.': 'ŚR.', 'CZW.': 'CZW.', 'PT.': 'PT.', 'SOB.': 'SOB.', 'ND.': 'ND.', '⚠️': '⚠️' } 
+    },
     de: { search: "🔍 Stadt suchen...", found: "Gefunden:", l_furn: "Sperrmüll (Möbel)", l_wood: "Holz", l_metal: "Metall", l_elec: "Elektro", l_paper: "Papier", days: { 'PON.': 'MO.', 'WT.': 'DI.', 'ŚR.': 'MI.', 'CZW.': 'DO.', 'PT.': 'FR.', 'SOB.': 'SA.', 'ND.': 'SO.', '⚠️': '⚠️' } },
     cs: { search: "🔍 Hledat město...", found: "Nalezeno:", l_furn: "Objemný odpad", l_wood: "Dřevo", l_metal: "Kov", l_elec: "Elektro", l_paper: "Papír", days: { 'PON.': 'PO.', 'WT.': 'ÚT.', 'ŚR.': 'ST.', 'CZW.': 'ČT.', 'PT.': 'PÁ.', 'SOB.': 'SO.', 'ND.': 'NE.', '⚠️': '⚠️' } },
     sk: { search: "🔍 Hľadať mesto...", found: "Nájdené:", l_furn: "Objemný odpad", l_wood: "Drevo", l_metal: "Kov", l_elec: "Elektro", l_paper: "Papier", days: { 'PON.': 'PO.', 'WT.': 'UT.', 'ŚR.': 'ST.', 'CZW.': 'ŠT.', 'PT.': 'PI.', 'SOB.': 'SO.', 'ND.': 'NE.', '⚠️': '⚠️' } },
