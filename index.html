@@ -29,17 +29,26 @@
             user-select: text !important;
         }
 
-        /* --- STYL DLA OPISU FIRMY --- */
-        .about-text {
-            text-align: center;
-            color: #8b949e; /* GitHub Dimmed Text */
-            font-size: 1.1em; /* Powiększone */
-            margin: -10px auto 30px auto;
-            max-width: 900px;
-            line-height: 1.6;
-            font-style: italic;
-            padding: 0 10px;
-        }
+        /* --- POPRAWIONY STYL OPISU (Z DZIELENIEM WYRAZÓW) --- */
+.about-text {
+    text-align: justify;       /* Rozciąganie do obu krawędzi */
+    text-justify: inter-word;  /* Algorytm skupiający się na odstępach między słowami */
+    
+    /* KLUCZOWE: Włączenie automatycznego dzielenia wyrazów */
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+
+    /* Reszta Twojego stylu */
+    color: #8b949e; 
+    font-size: 1.2em; 
+    font-style: italic; 
+    line-height: 1.6; 
+    margin: 0px auto 30px; 
+    max-width: 900px; 
+    padding: 0px 10px;
+}
 
         /* STYLIZACJA GŁÓWNA */
         .harmonogram-wrapper {
@@ -435,7 +444,7 @@
     
     <div id="weekendPromoBox" class="promo-banner">
         🔥 WEEKENDOWA PROMOCJA! <br>
-        <span style="font-size:0.8em; font-weight:normal;">Pakiet Basic jeden rejon taniej o 20 PLN! (tylko dziś)</span>
+        <span style="font-size:0.8em; font-weight:normal;">Pakiet Basic w specjalnych cenach! (60/100/120 PLN)</span>
     </div>
 
     <h2 id="headerChoose">Wybierz swój pakiet</h2>
@@ -1446,11 +1455,13 @@
         // Sprawdzamy czy jest Sobota (6) LUB Niedziela (0) i czy to PL
         if (userLang === 'pl' && (todayDay === 6 || todayDay === 0)) {
             
-            // 1. Zmieniamy cenę w konfiguracji dla 1 regionu
+            // 1. Zmieniamy ceny w konfiguracji (60/100/120)
             config['pl'].prices[1] = 60;
+            config['pl'].prices[2] = 100;
+            config['pl'].prices[3] = 120;
             
             // 2. Aktualizujemy teksty (nadpisujemy obiekt t)
-            t.basicPrice = '60 - 160 PLN'; 
+            t.basicPrice = '60 - 120 PLN'; 
             t.basicSubtitle = '🔥 Weekendowa Promocja!';
             
             // 3. Pokaż baner
