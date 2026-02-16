@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Łowcy Wystawek - Panel Ekipy (GitHub Dark)</title>
+    <title>Łowcy Wystawek - Panel Ekipy (GitHub Dark + Discount)</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         /* --- GLOBALNE USTAWIENIA (GITHUB DARK THEME PALETTE & LARGE TEXT) --- */
@@ -291,6 +291,16 @@
             font-weight: bold;
         }
         .summary-box span { color: #d29922; font-size: 1.2em; }
+        
+        /* STYL INFORMACJI O RABACIE */
+        #discountInfo {
+            color: #238636; /* Zielony kolor z palety GitHub */
+            text-align: center;
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: none;
+            font-weight: bold;
+        }
 
         /* PRZYCISK SUBMIT - WYRÓWNANY Z FLEXBOX */
         .submit-btn { 
@@ -606,7 +616,7 @@
             </div>
 
              <div class="option-box hidden" id="dhlBox">
-                 <label class="region-label"><input id="dhlOption" type="checkbox" /> 📦 Wysyłka DHL/Paczkomat (Dokument Drukowany) <b></b></label>
+                 <label class="region-label"><input id="dhlOption" type="checkbox" /> <span id="dhlLabel">📦 Wysyłka DHL/Paczkomat (Dokument Drukowany)</span> <b></b></label>
             </div>
             
              <div class="option-box" id="groupOptionContainer">
@@ -634,6 +644,8 @@
                 Administratorem danych jest właściciel serwisu. Dane podane w formularzu będą przetwarzane wyłącznie w celu udzielenia odpowiedzi lub realizacji zamówienia.
             </div>
         </div>
+        
+        <div id="discountInfo"></div>
 
         <div class="summary-box" id="liveSummary">
             RAZEM: <span id="summaryTotal">0</span> <span id="summaryCurrency">PLN</span>
@@ -654,7 +666,7 @@
         </div>
 
         <div class="rules-box-wrapper" id="rulesBox">
-            <span class="rules-title" id="rulesTitle">&#x26A0; WAŻNE: Zasady Licencji</span>
+            <span class="rules-title" id="rulesTitle">⚠ WAŻNE: Zasady Licencji</span>
             <p class="rules-text" id="rulesText">
                 👤 Dostęp Indywidualny = 1 Użytkownik.<br>
                 🚫 Po wykryciu udostępniania kolejne zamówienie zostanie zoptymalizowane dla grupy.<br>
@@ -671,16 +683,37 @@
         // --- KONFIGURACJA BLOKADY true/false MAPY ONLINE ---
         // Ustaw true, aby ukryć opcję "Mapa Online"
         const LOCK_MAP = false; 
+
+        // ============================================================
+        // --- KONFIGURACJA DNI PROMOCJI ---
+        // 0 = Niedziela, 1 = Poniedziałek, 2 = Wtorek, 3 = Środa, 4 = Czwartek, 5 = Piątek, 6 = Sobota
+        const PROMO_DAYS = []; // Pusta tablica = brak promocji, [0, 6] = Weekend
+        // ============================================================
         
         var userLang = navigator.language || navigator.userLanguage; 
         userLang = userLang.substr(0, 2).toLowerCase();
         
-        // LISTA OBSŁUGIWANYCH JĘZYKÓW
+        // Lista obsługiwanych języków
         const supported = ['pl', 'de', 'cs', 'sk', 'hu', 'ro', 'bg', 'tr', 'bs', 'uk', 'ru', 'lt'];
         if (!supported.includes(userLang)) userLang = 'de'; 
 
-        // WSPÓLNE CENY DLA EUROPY (EUR)
         const pricesEUR = { 1: 20, 2: 30, 3: 40, groupSurcharge: 20, pro: 60, offline: 5, dhl: 5, map: 25 };
+
+        // Tłumaczenia zniżki
+        const discountTexts = {
+            'pl': '🎁 Zniżka wielotygodniowa: -',
+            'de': '🎁 Mehrwochenrabatt: -',
+            'cs': '🎁 Více týdenní sleva: -',
+            'sk': '🎁 Viactýždňová zľava: -',
+            'hu': '🎁 Több hetes kedvezmény: -',
+            'ro': '🎁 Reducere pentru mai multe săptămâni: -',
+            'bg': '🎁 Отстъпка за няколко седмици: -',
+            'tr': '🎁 Çoklu hafta indirimi: -',
+            'bs': '🎁 Popust za više sedmica: -',
+            'uk': '🎁 Знижка за кілька тижнів: -',
+            'ru': '🎁 Скидка за несколько недель: -',
+            'lt': '🎁 Kelių savaičių nuolaida: -'
+        };
 
         const config = {
             'pl': {
@@ -725,6 +758,7 @@
                     offlineLabel: 'Dodaj wersję <b>OFFLINE (HTML)</b>',
                     mapLabel: '🗺️ Mapa Online (Wersja Premium)',
                     schrottLabel: '🧲 Złom / E-Złom (E-Schrott, Metal i Elektro)',
+                    dhlLabel: '📦 Wysyłka DHL/Paczkomat (Dokument Drukowany)',
                     placeholderPhone: 'Numer telefonu (opcjonalnie)',
                     placeholderEmail: 'Twój adres E-mail (wymagane)',
                     btnSubmit: '\u2705 WYŚLIJ ZAPYTANIE', 
@@ -788,6 +822,7 @@
                     offlineLabel: '<b>OFFLINE (HTML)</b> hinzufügen',
                     mapLabel: '🗺️ Online Karte (Premium Version)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Versand DHL/DPD (Gedrucktes Dokument)',
                     placeholderPhone: 'Telefonnummer',
                     placeholderEmail: 'E-Mail-Adresse',
                     btnSubmit: 'ANFRAGE SENDEN',
@@ -851,6 +886,7 @@
                     offlineLabel: 'Přidat verzi <b>OFFLINE (HTML)</b>',
                     mapLabel: '🗺️ Online Mapa (Premium Verze)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Doprava DHL/DPD (Tištěný dokument)',
                     placeholderPhone: 'Telefonní číslo (volitelné)',
                     placeholderEmail: 'Váš E-mail (povinné)',
                     btnSubmit: '\u2705 ODESLAT POPTÁVKU',
@@ -914,6 +950,7 @@
                     offlineLabel: 'Pridať verziu <b>OFFLINE (HTML)</b>',
                     mapLabel: '🗺️ Online Mapa (Premium Verzia)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Doprava DHL/DPD (Tlačený dokument)',
                     placeholderPhone: 'Telefónne číslo (voliteľné)',
                     placeholderEmail: 'Váš E-mail (povinné)',
                     btnSubmit: '\u2705 ODOSLAŤ DOPYT',
@@ -977,6 +1014,7 @@
                     offlineLabel: '<b>OFFLINE (HTML)</b> verzió hozzáadása',
                     mapLabel: '🗺️ Online Térkép (Premium Verzió)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Szállítás DHL/DPD (Nyomtatott dokumentum)',
                     placeholderPhone: 'Telefonszám (opcionális)',
                     placeholderEmail: 'E-mail cím (kötelező)',
                     btnSubmit: '\u2705 AJÁNLATKÉRÉS KÜLDÉSE',
@@ -1040,6 +1078,7 @@
                     offlineLabel: 'Adaugă versiunea <b>OFFLINE (HTML)</b>',
                     mapLabel: '🗺️ Hartă Online (Premium)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Livrare DHL/DPD (Document tipărit)',
                     placeholderPhone: 'Număr de telefon (opțional)',
                     placeholderEmail: 'Adresa ta de E-mail (obligatoriu)',
                     btnSubmit: '\u2705 TRIMITE CEREREA',
@@ -1103,6 +1142,7 @@
                     offlineLabel: 'Добави <b>OFFLINE (HTML)</b> версия',
                     mapLabel: '🗺️ Онлайн карта (Premium версия)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Доставка DHL/DPD (Печатен документ)',
                     placeholderPhone: 'Телефонен номер (по избор)',
                     placeholderEmail: 'Вашият имейл (задължително)',
                     btnSubmit: '\u2705 ИЗПРАТИ ЗАПИТВАНЕ',
@@ -1166,6 +1206,7 @@
                     offlineLabel: '<b>OFFLINE (HTML)</b> sürümü ekle',
                     mapLabel: '🗺️ Online Harita (Premium Sürüm)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 DHL/DPD Kargo (Basılı Belge)',
                     placeholderPhone: 'Telefon Numarası (isteğe bağlı)',
                     placeholderEmail: 'E-posta Adresiniz (gerekli)',
                     btnSubmit: '\u2705 SORGULAMA GÖNDER',
@@ -1229,6 +1270,7 @@
                     offlineLabel: 'Dodaj <b>OFFLINE (HTML)</b> verziju',
                     mapLabel: '🗺️ Online Mapa (Premium)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Dostava DHL/DPD (Štampani dokument)',
                     placeholderPhone: 'Broj telefona (opcionalno)',
                     placeholderEmail: 'Vaša E-mail adresa (obavezno)',
                     btnSubmit: '\u2705 POŠALJI UPIT',
@@ -1292,6 +1334,7 @@
                     offlineLabel: 'Додати <b>OFFLINE (HTML)</b> версію',
                     mapLabel: '🗺️ Онлайн Карта (Premium)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Доставка DHL/DPD (Друкований документ)',
                     placeholderPhone: 'Номер телефону (опціонально)',
                     placeholderEmail: 'Ваш E-mail (обов\'язково)',
                     btnSubmit: '\u2705 НАДІСЛАТИ ЗАПИТ',
@@ -1355,6 +1398,7 @@
                     offlineLabel: 'Добавить <b>OFFLINE (HTML)</b> версию',
                     mapLabel: '🗺️ Онлайн Карта (Premium)',
                     schrottLabel: '🧲 Только лом / E-Лом',
+                    dhlLabel: '📦 Доставка DHL/DPD (Распечатанный документ)',
                     placeholderPhone: 'Номер телефона (опционально)',
                     placeholderEmail: 'Ваш E-mail (обязательно)',
                     btnSubmit: '\u2705 ОТПРАВИТЬ ЗАПРОС',
@@ -1418,6 +1462,7 @@
                     offlineLabel: 'Pridėti <b>OFFLINE (HTML)</b> versiją',
                     mapLabel: '🗺️ Online Žemėlapis (Premium)',
                     schrottLabel: '🧲 Schrott & E-Schrott',
+                    dhlLabel: '📦 Pristatymas DHL/DPD (Atspausdintas dokumentas)',
                     placeholderPhone: 'Telefono numeris (neprivaloma)',
                     placeholderEmail: 'Jūsų el. paštas (privaloma)',
                     btnSubmit: '\u2705 SIŲSTI UŽKLAUSĄ',
@@ -1533,6 +1578,7 @@
         setHtml('mapLabel', t.mapLabel);
         setText('groupLabel', t.groupLabel);
         if(t.schrottLabel) setHtml('schrottLabel', t.schrottLabel);
+        if(t.dhlLabel) setHtml('dhlLabel', t.dhlLabel);
         setAttr('klientTelefon', 'placeholder', t.placeholderPhone);
         setAttr('klientEmail', 'placeholder', t.placeholderEmail);
         setText('btnSubmit', t.btnSubmit);
@@ -1612,7 +1658,7 @@
             recalcTotal();
         }
 
-        // --- ZABEZPIECZONA FUNKCJA LICZĄCA SUMĘ ---
+        // --- ZABEZPIECZONA FUNKCJA LICZĄCA SUMĘ Z RABATEM ---
         function recalcTotal() {
             var wR = document.querySelectorAll('.region-chk:checked');
             var wT = document.querySelectorAll('.week-chk:checked');
@@ -1621,8 +1667,11 @@
             var isMap = document.getElementById('mapOption') ? document.getElementById('mapOption').checked : false; 
             var isGroup = document.getElementById('groupOption') ? document.getElementById('groupOption').checked : false;
 
+            var discountInfo = document.getElementById('discountInfo');
+
             if (wT.length === 0) {
                  if(document.getElementById('summaryTotal')) document.getElementById('summaryTotal').innerText = "0";
+                 if(discountInfo) discountInfo.style.display = 'none';
                  return;
             }
 
@@ -1633,7 +1682,6 @@
             if (isPro) {
                  baseWeeklyPrice = p.pro;
             } else {
-                 // UŻYCIE CENY BAZOWEJ (W WEEKEND JEST ONA JUŻ ZMODYFIKOWANA W CONFIGU)
                  baseWeeklyPrice = p[wR.length] || p[1] || 0;
                  if (isGroup) {
                      baseWeeklyPrice += p.groupSurcharge;
@@ -1645,6 +1693,27 @@
             if (!isPro && !isGroup && isO) suma += p.offline; 
             if (isD) suma += p.dhl;
             
+            // Naliczanie Rabatu
+            var discountPerWeek = 0;
+            if (wT.length > 1) {
+                discountPerWeek = (userLang === 'pl') ? 20 : 5;
+            }
+
+            var totalDiscount = discountPerWeek * wT.length;
+            suma -= totalDiscount;
+            if (suma < 0) suma = 0;
+
+            // Pokazywanie informacji o rabacie
+            if (totalDiscount > 0) {
+                var dText = discountTexts[userLang] || discountTexts['de'];
+                if(discountInfo) {
+                    discountInfo.innerText = dText + totalDiscount + " " + c;
+                    discountInfo.style.display = 'block';
+                }
+            } else {
+                if(discountInfo) discountInfo.style.display = 'none';
+            }
+
             if (document.getElementById('summaryTotal')) document.getElementById('summaryTotal').innerText = suma;
         }
 
